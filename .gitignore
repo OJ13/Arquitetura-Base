@@ -1,0 +1,10 @@
+**/bin/Debug/
+**/bin/Release/
+**/obj
+*.suo
+*.user
+bin
+obj
+packages
+logs
+GestaoDeAudio/Back/.vs/GestaoDeAudio/DesignTimeBuild/.dtbcache.v2

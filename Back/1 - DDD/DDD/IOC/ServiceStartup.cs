@@ -9,6 +9,7 @@ namespace DDD.IOC
         {
             services.AddTransient<IUsuarioService, UsuarioService>();
             services.AddTransient<IPerfilService, PerfilService>();
+            services.AddTransient<IUsuarioSenhaHistoryService, UsuarioSenhaHistoryService>();
         }
 
     }

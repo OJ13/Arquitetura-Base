@@ -16,5 +16,6 @@ namespace DDD.Data
         public virtual DbSet<Perfil> Perfil { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<PerfilMenu> PerfilMenu { get; set; }
+        public virtual DbSet<UsuarioSenhaHistory> UsuarioSenhaHistory { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace DDD.Helpers
 {
     public static class TokenHelper
     {
-        public static string BuildToken(Usuario user, List<string> roles, string keyApp)
+        public static string BuildToken(Usuario user, List<string> roles, string keyApp, double timeExpiration)
         {
             var tokenHandle = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(keyApp);
@@ -25,7 +25,7 @@ namespace DDD.Helpers
                     new Claim(ClaimTypes.Role, roles.FirstOrDefault()),
                     new Claim("PerfilId", user.PerfilId.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(30),//_appSettings.Auth.Expiration),
+                Expires = DateTime.UtcNow.AddMinutes(timeExpiration),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

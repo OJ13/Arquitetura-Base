@@ -2,6 +2,7 @@ using DDD.Data;
 using DDD.Domain.Models;
 using DDD.Helpers;
 using DDD.IOC;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -11,8 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
+using System.Text;
 
 namespace API
 {
@@ -74,6 +77,24 @@ namespace API
 
             }).AddEntityFrameworkStores<EFContext>()
               .AddDefaultTokenProviders();
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+           .AddJwtBearer(x =>
+           {
+               x.RequireHttpsMetadata = false;
+               x.SaveToken = true;
+               x.TokenValidationParameters = new TokenValidationParameters
+               {
+                   ValidateIssuerSigningKey = true,
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appSettings.Auth.JWTSecret)),
+                   ValidateIssuer = false,
+                   ValidateAudience = false
+               };
+           });
 
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
 

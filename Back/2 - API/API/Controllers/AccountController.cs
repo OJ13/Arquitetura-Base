@@ -39,6 +39,7 @@ namespace API.Controllers
             ) :base(logger)
         {
             _logger = logger;
+            _appSettings = appsettings.Value;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -60,6 +61,9 @@ namespace API.Controllers
             try
             {
                 var user = await _userManager.FindByNameAsync(request.UserName);
+                if (user == null)
+                    return BadRequest(new ApiResponseError(HttpStatusCode.BadRequest, "Erro na Autenticação do Usuário") { Errors = new List<string>() { "Usuário não reconhecido pela aplicação" } });
+
                 if (user.Ativo)
                 {
                     var result = await _signInManager.PasswordSignInAsync(user, request.Senha, isPersistent: false, lockoutOnFailure: true);
@@ -156,6 +160,9 @@ namespace API.Controllers
                 request.ForcaTrocaSenha = true;
                 request.DataCriacao = DateTime.Now;
                 request.Logado = false;
+                request.Ativo = true;
+                request.DataUltimaTrocaSenha = DateTime.Now;
+                request.DataUltimoLogin = DateTime.Now;
 
                 var existUser = await _userManager.FindByNameAsync(request.UserName);
 
